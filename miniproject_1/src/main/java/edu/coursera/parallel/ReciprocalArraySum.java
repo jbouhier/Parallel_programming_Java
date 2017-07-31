@@ -1,5 +1,6 @@
 package edu.coursera.parallel;
 
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
 /**
@@ -121,7 +122,14 @@ public final class ReciprocalArraySum {
 
         @Override
         protected void compute() {
-            // TODO
+            ReciprocalArraySumTask left = new ReciprocalArraySumTask(startIndexInclusive,
+                    (endIndexExclusive + startIndexInclusive) / 2, input);
+            ReciprocalArraySumTask right = new ReciprocalArraySumTask(
+                    (endIndexExclusive + startIndexInclusive) / 2, startIndexInclusive, input);
+            left.fork();
+            right.compute();
+            left.join();
+            value = left.value + right.value;
         }
     }
 
@@ -136,14 +144,14 @@ public final class ReciprocalArraySum {
      */
     protected static double parArraySum(final double[] input) {
         assert input.length % 2 == 0;
-
         double sum = 0;
 
-        // Compute sum of reciprocals of array elements
-        for (int i = 0; i < input.length; i++) {
-            sum += 1 / input[i];
-        }
-
+        long startTime = System.nanoTime();
+        ReciprocalArraySumTask t = new ReciprocalArraySumTask(0, input.length, input);
+        ForkJoinPool.commonPool().invoke(t);
+        sum = t.getValue();
+        long timeInNanos = System.nanoTime() - startTime;
+        System.out.println("parArraySum() --- time= " + timeInNanos + " --- sum= " + sum);
         return sum;
     }
 
@@ -160,11 +168,12 @@ public final class ReciprocalArraySum {
     protected static double parManyTaskArraySum(final double[] input, final int numTasks) {
         double sum = 0;
 
-        // Compute sum of reciprocals of array elements
-        for (int i = 0; i < input.length; i++) {
-            sum += 1 / input[i];
-        }
-
+        long startTime = System.nanoTime();
+        ReciprocalArraySumTask t = new ReciprocalArraySumTask(0, input.length, input);
+        ForkJoinPool.commonPool().invoke(t);
+        sum = t.getValue();
+        long timeInNanos = System.nanoTime() - startTime;
+        System.out.println("parArraySum() --- time= " + timeInNanos + " --- sum= " + sum);
         return sum;
     }
 }
