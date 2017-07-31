@@ -53,8 +53,7 @@ public final class ReciprocalArraySum {
      * @return The inclusive index that this chunk starts at in the set of
      *         nElements
      */
-    private static int getChunkStartInclusive(final int chunk,
-            final int nChunks, final int nElements) {
+    private static int getChunkStartInclusive(final int chunk, final int nChunks, final int nElements) {
         final int chunkSize = getChunkSize(nChunks, nElements);
         return chunk * chunkSize;
     }
@@ -68,8 +67,7 @@ public final class ReciprocalArraySum {
      * @param nElements The number of elements to chunk across
      * @return The exclusive end index for this chunk
      */
-    private static int getChunkEndExclusive(final int chunk, final int nChunks,
-            final int nElements) {
+    private static int getChunkEndExclusive(final int chunk, final int nChunks, final int nElements) {
         final int chunkSize = getChunkSize(nChunks, nElements);
         final int end = (chunk + 1) * chunkSize;
         if (end > nElements) {
@@ -103,13 +101,11 @@ public final class ReciprocalArraySum {
 
         /**
          * Constructor.
-         * @param setStartIndexInclusive Set the starting index to begin
-         *        parallel traversal at.
+         * @param setStartIndexInclusive Set the starting index to begin parallel traversal at.
          * @param setEndIndexExclusive Set ending index for parallel traversal.
          * @param setInput Input values
          */
-        ReciprocalArraySumTask(final int setStartIndexInclusive,
-                final int setEndIndexExclusive, final double[] setInput) {
+        ReciprocalArraySumTask(final int setStartIndexInclusive, final int setEndIndexExclusive, final double[] setInput) {
             this.startIndexInclusive = setStartIndexInclusive;
             this.endIndexExclusive = setEndIndexExclusive;
             this.input = setInput;
@@ -161,8 +157,7 @@ public final class ReciprocalArraySum {
      * @param numTasks The number of tasks to create
      * @return The sum of the reciprocals of the array input
      */
-    protected static double parManyTaskArraySum(final double[] input,
-            final int numTasks) {
+    protected static double parManyTaskArraySum(final double[] input, final int numTasks) {
         double sum = 0;
 
         // Compute sum of reciprocals of array elements
