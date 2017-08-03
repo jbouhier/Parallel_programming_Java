@@ -123,7 +123,8 @@ public final class ReciprocalArraySum {
 
         @Override
         protected void compute() {
-            int half = (endIndexExclusive + startIndexInclusive) / 2;
+            // Bitwise operation equivalent to dividing by 2
+            int half = (endIndexExclusive + startIndexInclusive) >>> 1;
 
             if (endIndexExclusive - startIndexInclusive < SEQUENTIAL_THRESHOLD) {
                 for (int i = startIndexInclusive; i < endIndexExclusive; i++) {
