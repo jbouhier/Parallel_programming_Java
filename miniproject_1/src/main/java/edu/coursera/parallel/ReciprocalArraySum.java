@@ -151,13 +151,9 @@ public final class ReciprocalArraySum {
      */
     protected static double parArraySum(final double[] input) {
         assert input.length % 2 == 0;
-
-        double sum = 0;
         ReciprocalArraySumTask t = new ReciprocalArraySumTask(0, input.length, input);
         ForkJoinPool.commonPool().invoke(t);
-        sum = t.getValue();
-
-        return sum;
+        return t.getValue();
     }
 
     /**
