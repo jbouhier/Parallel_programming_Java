@@ -83,7 +83,7 @@ public final class ReciprocalArraySum {
      * created to perform reciprocal array sum in parallel.
      */
     private static class ReciprocalArraySumTask extends RecursiveAction {
-        private static int SEQUENTIAL_THRESHOLD = 1000;
+        private static int SEQUENTIAL_THRESHOLD = 100_000;
         /**
          * Starting index for traversal done by this task.
          */
@@ -166,7 +166,7 @@ public final class ReciprocalArraySum {
      * @return The sum of the reciprocals of the array input
      */
     protected static double parManyTaskArraySum(final double[] input, final int numTasks) {
-        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", String.valueOf(numTasks));
+        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", Integer.toString(numTasks));
         ReciprocalArraySumTask t = new ReciprocalArraySumTask(0, input.length, input);
         ForkJoinPool.commonPool().invoke(t);
         return t.getValue();
