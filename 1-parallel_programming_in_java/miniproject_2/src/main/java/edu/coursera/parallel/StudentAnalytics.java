@@ -1,9 +1,6 @@
 package edu.coursera.parallel;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -17,8 +14,7 @@ public final class StudentAnalytics {
      * @param studentArray Student data for the class.
      * @return Average age of enrolled students
      */
-    public double averageAgeOfEnrolledStudentsImperative(
-            final Student[] studentArray) {
+    public double averageAgeOfEnrolledStudentsImperative(final Student[] studentArray) {
         List<Student> activeStudents = new ArrayList<Student>();
 
         for (Student s : studentArray) {
@@ -44,9 +40,13 @@ public final class StudentAnalytics {
      * @param studentArray Student data for the class.
      * @return Average age of enrolled students
      */
-    public double averageAgeOfEnrolledStudentsParallelStream(
-            final Student[] studentArray) {
-        throw new UnsupportedOperationException();
+    public double averageAgeOfEnrolledStudentsParallelStream(final Student[] studentArray) {
+        return Stream.of(studentArray)
+            .parallel()
+            .filter(s -> s.checkIsCurrent())
+            .mapToDouble(s -> s.getAge())
+            .average()
+            .getAsDouble();
     }
 
     /**
