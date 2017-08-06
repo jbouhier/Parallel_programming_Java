@@ -3,6 +3,8 @@ package edu.coursera.parallel;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static java.lang.Math.toIntExact;
+
 /**
  * A simple wrapper class for various analytics methods.
  */
@@ -56,8 +58,7 @@ public final class StudentAnalytics {
      * @param studentArray Student data for the class.
      * @return Most common first name of inactive students
      */
-    public String mostCommonFirstNameOfInactiveStudentsImperative(
-            final Student[] studentArray) {
+    public String mostCommonFirstNameOfInactiveStudentsImperative(final Student[] studentArray) {
         List<Student> inactiveStudents = new ArrayList<Student>();
 
         for (Student s : studentArray) {
@@ -98,10 +99,18 @@ public final class StudentAnalytics {
      * @param studentArray Student data for the class.
      * @return Most common first name of inactive students
      */
-    public String mostCommonFirstNameOfInactiveStudentsParallelStream(
-            final Student[] studentArray) {
-        throw new UnsupportedOperationException();
-    }
+//    public String mostCommonFirstNameOfInactiveStudentsParallelStream(final Student[] studentArray) {
+//        Stream.of(studentArray)
+//            .parallel()
+//            .filter(s -> !s.checkIsCurrent())
+//            .collect(Collectors.groupingBy(s -> s.getFirstName(), Collectors.counting()))
+//            .entrySet()
+//            .stream()
+////            .max(Comparator.comparing(Map.Entry::getValue));
+////
+//
+//        return null;
+//    }
 
     /**
      * Sequentially computes the number of students who have failed the course
@@ -134,8 +143,10 @@ public final class StudentAnalytics {
      * @param studentArray Student data for the class.
      * @return Number of failed grades from students older than 20 years old.
      */
-    public int countNumberOfFailedStudentsOlderThan20ParallelStream(
-            final Student[] studentArray) {
-        throw new UnsupportedOperationException();
+    public int countNumberOfFailedStudentsOlderThan20ParallelStream(final Student[] studentArray) {
+        return toIntExact(Stream.of(studentArray)
+            .parallel()
+            .filter(s -> !s.checkIsCurrent() && s.getAge() > 20 && s.getGrade() < 65)
+            .count());
     }
 }
