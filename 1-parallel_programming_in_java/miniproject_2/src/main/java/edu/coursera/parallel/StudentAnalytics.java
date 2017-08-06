@@ -1,6 +1,8 @@
 package edu.coursera.parallel;
 
+import java.lang.reflect.Array;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.Math.toIntExact;
@@ -43,12 +45,12 @@ public final class StudentAnalytics {
      * @return Average age of enrolled students
      */
     public double averageAgeOfEnrolledStudentsParallelStream(final Student[] studentArray) {
-        return Stream.of(studentArray)
+        return Arrays.stream(studentArray)
             .parallel()
             .filter(s -> s.checkIsCurrent())
             .mapToDouble(s -> s.getAge())
             .average()
-            .getAsDouble();
+            .orElseThrow(IllegalStateException::new);
     }
 
     /**
@@ -99,18 +101,23 @@ public final class StudentAnalytics {
      * @param studentArray Student data for the class.
      * @return Most common first name of inactive students
      */
-//    public String mostCommonFirstNameOfInactiveStudentsParallelStream(final Student[] studentArray) {
-//        Stream.of(studentArray)
-//            .parallel()
-//            .filter(s -> !s.checkIsCurrent())
-//            .collect(Collectors.groupingBy(s -> s.getFirstName(), Collectors.counting()))
-//            .entrySet()
-//            .stream()
-////            .max(Comparator.comparing(Map.Entry::getValue));
-////
-//
-//        return null;
-//    }
+    public String mostCommonFirstNameOfInactiveStudentsParallelStream(final Student[] studentArray) {
+//        return Stream.of(studentArray)
+//                .parallel()
+//                .filter(s -> !s.checkIsCurrent())
+//                .collect(Collectors.groupingBy(s -> s.getFirstName(), Collectors.counting()))
+//                .entrySet()
+//                .stream()
+//                .parallel()
+//                .max(Comparator.comparing(Map.Entry::getValue))
+//                .toString();
+        return Collections.max(
+                Arrays.stream(studentArray)
+                .collect(Collectors.groupingBy(s -> s.getFirstName(), Collectors.counting()))
+                .entrySet(),
+                Comparator.comparing(s -> s.getValue())
+        ).getKey();
+    }
 
     /**
      * Sequentially computes the number of students who have failed the course
@@ -121,8 +128,7 @@ public final class StudentAnalytics {
      * @param studentArray Student data for the class.
      * @return Number of failed grades from students older than 20 years old.
      */
-    public int countNumberOfFailedStudentsOlderThan20Imperative(
-            final Student[] studentArray) {
+    public int countNumberOfFailedStudentsOlderThan20Imperative(final Student[] studentArray) {
         int count = 0;
         for (Student s : studentArray) {
             if (!s.checkIsCurrent() && s.getAge() > 20 && s.getGrade() < 65) {
@@ -144,9 +150,9 @@ public final class StudentAnalytics {
      * @return Number of failed grades from students older than 20 years old.
      */
     public int countNumberOfFailedStudentsOlderThan20ParallelStream(final Student[] studentArray) {
-        return toIntExact(Stream.of(studentArray)
+        return (int) Arrays.stream(studentArray)
             .parallel()
             .filter(s -> !s.checkIsCurrent() && s.getAge() > 20 && s.getGrade() < 65)
-            .count());
+            .count();
     }
 }
