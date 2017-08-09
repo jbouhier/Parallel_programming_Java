@@ -102,17 +102,9 @@ public final class StudentAnalytics {
      * @return Most common first name of inactive students
      */
     public String mostCommonFirstNameOfInactiveStudentsParallelStream(final Student[] studentArray) {
-//        return Stream.of(studentArray)
-//                .parallel()
-//                .filter(s -> !s.checkIsCurrent())
-//                .collect(Collectors.groupingBy(s -> s.getFirstName(), Collectors.counting()))
-//                .entrySet()
-//                .stream()
-//                .parallel()
-//                .max(Comparator.comparing(Map.Entry::getValue))
-//                .toString();
         return Collections.max(
                 Arrays.stream(studentArray)
+                .parallel()
                 .collect(Collectors.groupingBy(s -> s.getFirstName(), Collectors.counting()))
                 .entrySet(),
                 Comparator.comparing(s -> s.getValue())
@@ -150,7 +142,7 @@ public final class StudentAnalytics {
      * @return Number of failed grades from students older than 20 years old.
      */
     public int countNumberOfFailedStudentsOlderThan20ParallelStream(final Student[] studentArray) {
-        return (int) Arrays.stream(studentArray)
+        return (int) Stream.of(studentArray)
             .parallel()
             .filter(s -> !s.checkIsCurrent() && s.getAge() > 20 && s.getGrade() < 65)
             .count();
