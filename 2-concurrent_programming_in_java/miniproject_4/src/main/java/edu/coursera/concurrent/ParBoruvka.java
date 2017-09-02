@@ -28,8 +28,22 @@ public final class ParBoruvka extends AbstractBoruvka<ParBoruvka.ParComponent> {
     @Override
     public void computeBoruvka(final Queue<ParComponent> nodesLoaded,
             final SolutionToBoruvka<ParComponent> solution) {
-        throw new UnsupportedOperationException();
+
+        // TODO nodesLoaded contains a list of all nodes to compute
+        // TODO the minimum spanning tree using Boruvka's algorithm
+
+
+        // ParComponent  ->  Single node or multiple collapsed nodes
+        // ParEdge       ->  Edge between two ParComponents
+        // Efficient implementation -> modify ParComponent and/or ParEdge.
+
+
+        // Once parallel Boruvka has collapsed the input graph down to a single component
+        // Call SolutionToBoruvka.setSolution() once to run tests.
+        // solution.setSolution(new ParComponent(42));
     }
+
+
 
     /**
      * ParComponent represents a single component in the graph. A component may
@@ -212,6 +226,8 @@ public final class ParBoruvka extends AbstractBoruvka<ParBoruvka.ParComponent> {
     }
     /* End ParComponent */
 
+
+
     /**
      * A ParEdge represents a weighted edge between two ParComponents.
      */
@@ -285,7 +301,6 @@ public final class ParBoruvka extends AbstractBoruvka<ParBoruvka.ParComponent> {
             }
             assert (false);
             return null;
-
         }
 
         /**
@@ -316,4 +331,6 @@ public final class ParBoruvka extends AbstractBoruvka<ParBoruvka.ParComponent> {
             return this;
         }
     }
+
+
 }
