@@ -31,7 +31,7 @@ public class MatrixMult {
         mpi.MPI_Bcast(a.getValues(), 0, a.getNRows() * a.getNCols(), 0, mpi.MPI_COMM_WORLD);
         mpi.MPI_Bcast(b.getValues(), 0, b.getNRows() * b.getNCols(), 0, mpi.MPI_COMM_WORLD);
 
-        for (int i = 0; i < c.getNRows(); i++) {
+        for (int i = startRow; i < endRow; i++) {
             for (int j = 0; j < c.getNCols(); j++) {
                 c.set(i, j, 0.0);
                 for (int k = 0; k < b.getNRows(); k++) {
@@ -55,7 +55,14 @@ public class MatrixMult {
             }
             mpi.MPI_Waitall(requests);
         } else {
-            mpi.MPI_Send(c.getValues(), startRow * c.getNCols(), (endRow - startRow) * c.getNCols(), 0, myrank, mpi.MPI_COMM_WORLD);
+            mpi.MPI_Send(
+                c.getValues(),
+                startRow * c.getNCols(),
+                (endRow - startRow) * c.getNCols(),
+                0,
+                myrank,
+                mpi.MPI_COMM_WORLD
+            );
         }
     }
 }
